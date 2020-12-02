@@ -32,6 +32,9 @@
     "todos-e2e": {
       "tags": [],
       "implicitDependencies": ["todos"]
+    },
+    "server": {
+      "tags": []
     }
   }
 }
