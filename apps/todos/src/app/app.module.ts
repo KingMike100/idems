@@ -1,13 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from "@angular/common/http";
 
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
+import { TodosComponent } from './todos/todos.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, TodosComponent],
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterModule.forRoot([], { initialNavigation: 'enabled' }),
   ],
   providers: [],
