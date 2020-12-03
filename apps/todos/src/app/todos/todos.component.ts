@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { TodoService } from "../services/todo.service"
 import { FormControl, FormGroup, Validators} from "@angular/forms"
-
+import {OnlineOfflineService } from "../services/online-offline.service"
 @Component({
   selector: 'idems-todos',
   templateUrl: './todos.component.html',
@@ -13,7 +13,11 @@ export class TodosComponent implements OnInit {
   todos;
   form: FormGroup;
   
-  constructor(private http: HttpClient, private todoService: TodoService) { 
+  constructor(
+    private http: HttpClient, 
+    private todoService: TodoService,
+    public readonly onlineOfflineServive: OnlineOfflineService
+    ) { 
     this.form = new FormGroup({
       value: new FormControl('', Validators.required)
     });
