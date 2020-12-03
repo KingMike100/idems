@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { TodoService } from "../todo.service"
 
 @Component({
   selector: 'idems-todos',
@@ -10,7 +11,7 @@ export class TodosComponent implements OnInit {
 
   todos;
   
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private todoService: TodoService) { }
 
   ngOnInit(): void {
     this.getTodos();
@@ -18,10 +19,12 @@ export class TodosComponent implements OnInit {
   }
 
   getTodos(){
-    const url = 'http://localhost:8080/todos'
-  this.http.get(url,{headers:{"content-type":"application/json"}}).subscribe((data)=>{
-    this.todos = data;
-     console.log("data", this.todos)
-   })
+    this.todoService.getTodos().subscribe((data)=>{
+      this.todos = data;
+    })
+  }
+
+  addTodo(){
+
   }
 }
