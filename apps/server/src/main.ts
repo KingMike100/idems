@@ -29,7 +29,20 @@ app.get("/todos", async (req, res) => {
     res.send(JSON.stringify(rows))
 })
 
-
+app.post("/todos", async (req, res) => {
+  const result = {}
+  try{
+      const reqJson = req.body;
+      result.success = await addTodo(reqJson.text)
+  }
+  catch(e){
+      result.success = false;
+  }
+  finally{
+      res.setHeader("content-type", "application/json")
+      res.send(JSON.stringify(result))
+  }
+})
 
 
 
@@ -55,6 +68,15 @@ async function readTodos() {
     try {
     const results = await pool.query("select id, text from todos");
     return results.rows;
+    }
+    catch(e){
+        return [];
+    }
+}
+
+async function addTodo(todoText){
+    try{
+        await pool.query(" insert into todos (text) values ($1)", [todoText])
     }
     catch(e){
         return [];
