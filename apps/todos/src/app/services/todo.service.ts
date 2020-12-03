@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from "@angular/common/http"
 import { Todo } from '../models/todo'
 import { Observable } from 'rxjs';
+import { OnlineOfflineService} from './online-offline.service'
 
 
 import { HttpHeaders} from "@angular/common/http"
@@ -20,7 +21,9 @@ export class TodoService {
     })
   };
   
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private readonly onlineOfflineService: OnlineOfflineService) { 
+
+  }
 
   public getTodos(){
     const url = 'http://localhost:8080/todos'
