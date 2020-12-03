@@ -17,6 +17,8 @@ export class TodoService {
 
   private todos;
   private db: any;
+  private url = 'http://localhost:8080/todos'
+
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -30,26 +32,26 @@ export class TodoService {
   }
 
   public getTodos(){
-    const url = 'http://localhost:8080/todos'
-    this.todos = this.http.get(url, this.httpOptions)
+    this.todos = this.http.get(this.url, this.httpOptions)
     return this.todos;
 
   }
 
   public addTodo(todoText){
-    const url = 'http://localhost:8080/todos'
     const body = {"text": todoText.value}
     
     //check if user is not online
     if(!this.onlineOfflineService.isOnline){
       this.addToIndexedDb(body)
     }else{
-      this.http.post<any>(url, body, this.httpOptions).subscribe({
-        error: error =>{
-          const errormsg = error.message;
-          console.error('There was an error', errormsg)
+      this.http.post<any>(this.url, body, this.httpOptions).subscribe(
+        result =>{
+          console.log("result", result)
+        },
+        error =>{
+          console.error('There was an error', error)
         }
-      })
+      )
     }
   }
 
@@ -90,6 +92,17 @@ export class TodoService {
     allItems.forEach((item: Todo) => {
       console.log("adding items", item)
       //will implement http request here
+     this.http.post<any>(this.url, item, this.httpOptions).subscribe(
+      result =>{
+        this.db.todos.delete(item.text).then(()=>{
+          console.log("Item Sent and deleted locally")
+        })
+      },
+      error =>{
+        console.error('There was an error', error)
+      }
+    )
+  
     })
   }
 }
