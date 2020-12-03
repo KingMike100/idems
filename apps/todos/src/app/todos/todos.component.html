@@ -5,3 +5,13 @@
     <li *ngFor="let todo of todos"> {{todo.text}}</li>
 
 </ul>
+
+<h3>
+    Add Todo
+</h3>
+<div>
+    <form (ngSubmit)="addTodo()" [formGroup]="form">
+      <input type="text" formControlName="value" />
+      <button [disabled]="form.invalid">Add Todo</button>
+    </form>
+  </div>
