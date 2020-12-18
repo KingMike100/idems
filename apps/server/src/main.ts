@@ -44,7 +44,9 @@ app.post("/todos", async (req, res) => {
   }
 })
 
-
+app.get("/todos/check", (req, res)=>{
+    res.sendStatus(200)
+})
 
 
 app.listen(8080, () => console.log("Web server is listening.. on port 8080"))
