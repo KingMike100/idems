@@ -25,6 +25,8 @@ export class TodosComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTodos();
+    console.log("Starting !!")
+    this.todoService.syncDB();
 
   }
 
