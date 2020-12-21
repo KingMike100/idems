@@ -2,7 +2,7 @@
     Todos
 </h3>
 <ul *ngIf="todos">
-    <li *ngFor="let todo of todos"> {{todo.text}}</li>
+    <li *ngFor="let todo of todos"> {{todo.obj.text}}</li>
 
 </ul>
 <h4>Status: {{onlineOfflineServive.isOnline ? 'online': 'offline'}}</h4>

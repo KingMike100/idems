@@ -64,14 +64,7 @@ export class TodoService {
     syncClient.statusChange(this.url, (newStatus)=>{
       console.log("Sync Status changed: " + newStatus)
     })
-
-
-    syncClient.getStatus(this.url).then(res=>{
-      console.log("url status", res)
-    })
-   
     
-
   }
 
   public getTodos(){
