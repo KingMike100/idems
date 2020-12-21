@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http"
 import { Todo } from '../models/todo'
 import { Observable } from 'rxjs';
 import Dexie from 'dexie'
+import { UUID } from 'angular2-uuid'
 import SyncClient from 'sync-client'
 import 'dexie-syncable';
 import 'dexie-observable'
@@ -11,6 +12,16 @@ import { OnlineOfflineService} from './online-offline.service'
 
 import { HttpHeaders} from "@angular/common/http"
 
+const databaseName = 'MyTodos';
+    const versions = [{
+      version: 1,
+      stores:{
+        todos: 'id,text'
+      }
+    }]
+    let options = { pollInterval: 1000, table:"todos"}
+
+const syncClient = new SyncClient(databaseName, versions)
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +31,7 @@ export class TodoService {
 
   private todos;
   private db: any;
-  private url = 'http://localhost:8080/todos'
+  private url = 'http://localhost:3000'
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -35,20 +46,11 @@ export class TodoService {
   public syncDB(){
     console.log("Starting Dexie!!")
 
-    const databaseName = 'MyTodos';
-    const versions = [{
-      version: 1,
-      stores:{
-        todos: 'id,text'
-      }
-    }]
-    let options = { pollInterval: 1000}
-
-    const syncClient = new SyncClient(databaseName, versions)
+    
 
     console.log("connecting to sync server!!")
 
-    syncClient.connect("http://localhost:8080/todos", options).then(()=> {
+    syncClient.connect("http://localhost:3000", options).then(()=> {
       console.log("Connected Successfully")
 
     }, error =>{
@@ -63,14 +65,13 @@ export class TodoService {
       console.log("Sync Status changed: " + newStatus)
     })
 
-   /*
-    syncClient.transaction('rw', syncClient.todos,  () =>{
-      syncClient.todos.put({text: "December 16th"}).then(() => {
-        console.log ('todo updated ');
 
-      });  
-  });
-*/
+    syncClient.getStatus(this.url).then(res=>{
+      console.log("url status", res)
+    })
+   
+    
+
   }
 
   public getTodos(){
@@ -80,8 +81,20 @@ export class TodoService {
   }
 
   public addTodo(todoText){
-    const body = {"text": todoText.value}
- 
+    
+    const body = {
+      "id": UUID.UUID(),
+      "text": todoText.value
+    
+    }
+    
+    syncClient.transaction('rw', syncClient.todos,  () =>{
+      syncClient.todos.put(body).then(() => {
+        console.log ('todo added ');
+      });  
+  });
+    
+    /*
       this.http.post<any>(this.url, body, this.httpOptions).subscribe(
         result =>{
           console.log("result", result)
@@ -90,5 +103,6 @@ export class TodoService {
           console.error('There was an error', error)
         }
       )
+      */
     }
 }

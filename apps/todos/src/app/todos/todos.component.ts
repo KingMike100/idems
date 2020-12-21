@@ -32,7 +32,9 @@ export class TodosComponent implements OnInit {
 
   getTodos(){
     this.todoService.getTodos().subscribe((data)=>{
-      this.todos = data;
+      //this.todos = data;
+      this.todos = data.changes
+      console.log("todos object", data.changes)
     })
   }
 
